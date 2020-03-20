@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=.inf, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<button onclick="doAjax()">ajax</button>
+		<div id="info"></div>
+		<button>click</button>
+	</body>
+	<script>
+		function doAjax() {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(event) {
+				console.log(xhr.readyState, xhr.status);
+				console.log(xhr.responseText);
+				if(xhr.readyState===4 && xhr.status===200){
+					info.innerHTML = xhr.responseText;
+				}
+			};
+			xhr.open("POST", "/try-post",true);
+			xhr.send();
+		}
+	</script>
+</html>
