@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" />
+		<title>Document</title>
+	</head>
+	<script>
+		function checkForm() {
+			const fd = new FormData(document.form1);
+			fetch("/try-upload", {
+				method: "POST",
+				body: fd,
+			})
+				.then(r => r.json())
+				.then(obj => {
+					console.log(obj);
+					document.querySelector("#myImage").src = "/img/" + obj.newName;
+					console.log("/image/" + obj.newName);
+				});
+
+			return false;
+		}
+	</script>
+	<body>
+		<image id="myImage"></image>
+		<form name="form1" action="/try-upload" onsubmit="return checkForm()">
+			<label for="avatar">head-image:</label>
+			<input type="file" name="avatar" id="avatar" />
+			<br />
+			<label for="name">name:</label>
+			<input type="text" name="avatar" id="name" /><br />
+			<input type="submit" value="submit" drc="" />
+		</form>
+	</body>
+</html>

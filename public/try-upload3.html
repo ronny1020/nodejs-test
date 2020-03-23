@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<button onclick="doSelectFile()">Upload</button>
+
+<input type="file" id="avatar" style="display:none" onchange="doUpload()">
+
+<img src="" id="myImg">
+
+
+</body>
+
+<script>
+    const avatar = document.querySelector('#avatar');
+    function doSelectFile(){
+        avatar.click(); 
+    }
+
+    function doUpload(){
+        const fd = new FormData();
+        fd.append('avatar', avatar.files[0]);
+        fetch('/try-upload', {
+            method: 'POST',
+            body: fd,
+        })
+        .then(r=>r.json())
+        .then(obj=>{
+            console.log(obj);
+            document.querySelector('#myImg').src = '/img/' + obj.newName;
+        });
+    }
+
+
+</script>
+</html>

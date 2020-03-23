@@ -46,6 +46,10 @@ app.post("/try-post", (req, res) => {
 });
 
 app.post("/try-upload", upload.single("avatar"), (req, res) => {
+	const output = {
+		body: req.body,
+		file: req.file
+	};
 	console.log(req.file);
 	if (req.file && req.file.originalname) {
 		let ext = "";
@@ -62,16 +66,14 @@ app.post("/try-upload", upload.single("avatar"), (req, res) => {
 		}
 		if (ext) {
 			let fileName = uuid.v4() + ext;
+			output.newName = fileName;
 			fs.rename(req.file.path, "./public/img/" + fileName, error => {});
 		} else {
 			fs.unlink(req.file.path, error => {});
 		}
 	}
 
-	res.json({
-		body: req.body,
-		file: req.file
-	});
+	res.json(output);
 });
 
 app.get("/try-params1/:action/:id", (req, res) => {
