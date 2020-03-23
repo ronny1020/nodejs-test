@@ -10,10 +10,34 @@ const app = express();
 
 const uuid = require("uuid");
 
+const session = require("express-session");
+
+const moment = require("moment-timezone");
+
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(
+	session({
+		saveUninitialized: false,
+		resave: false,
+		secret: "lorem",
+		cookie: {
+			maxAge: 1200000
+		}
+	})
+);
+
+app.use((req, res, next) => {
+	if (req.session.loginUser) {
+		res.locals.loginUser = req.session.loginUser;
+	} else {
+		res.locals.loginUser = {};
+	}
+
+	next();
+});
 
 app.get("/", (req, res) => {
 	// res.send(`<h2>Hello world</h2>`);
@@ -90,6 +114,33 @@ app.get(/^\/mobile\/09\d{2}\-?\d{3}\-?\d{3}$/, (req, res) => {
 require(__dirname + "/admins/admin01")(app);
 app.use(require(__dirname + "/admins/admin02"));
 app.use("/admin03", require(__dirname + "/admins/admin03"));
+
+app.get("/try-session", (req, res) => {
+	req.session.my_var = req.session.my_var || 0;
+	req.session.my_var++;
+	res.json({
+		my_var: req.session.my_var,
+		session: req.session
+	});
+});
+
+app.use("/member", require(__dirname + "/routes/member"));
+app.get("/sess", (req, res) => {
+	res.json(req.session);
+});
+
+app.get("/try-moment", (req, res) => {
+	const fm = "YYY-MM-DD HH:mm:ss";
+	const m1 = moment(req.session.cookie.expires);
+	const m2 = moment(new Date());
+	const m3 = moment(03 / 06 / 19);
+ 
+	res.json({
+		"local-m1": m1.tz('Europe/London').format(fm),
+		"local-m2": m2.tz('Europe/London').format(fm),
+		"local-m3": m3.tz('Europe/London').format(fm)
+	});
+});
 
 app.use(express.static("public"));
 

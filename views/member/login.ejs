@@ -1,0 +1,42 @@
+<%- include('../parts/html-head') %> <%- include('../parts/navbar') %>
+<div class="container">
+	<form method="POST" onsubmit="return checkForm()" name="form1">
+		<div class="form-group">
+			<label for="account">account</label>
+			<input type="text" class="form-control" id="account" name="account" />
+			<small id="emailHelp" class="form-text text-muted"></small>
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" class="form-control" id="password" name="password" />
+		</div>
+
+		<button type="submit" class="btn btn-primary">login</button>
+	</form>
+</div>
+<script> 
+	function checkForm() {
+		const output = {
+			account: document.querySelector("#account").value,
+			password: document.querySelector("#password").value
+		};
+		fetch("/member/login", {
+			method: "POST",
+			body: JSON.stringify(output),
+			headers: {
+				"Content-Type": "application/JSON"
+			}
+		})
+		.then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    if(obj.success){
+                        location.href = '/';
+                    } else {
+                        alert(obj.error);
+                    }
+                })
+		return false;
+	}
+</script>
+<%- include('../parts/html-foot') %>
