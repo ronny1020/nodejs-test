@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 
 	next();
 });
+app.use("/address_book", require(__dirname + "/routes/address_book"));
 
 app.get("/", (req, res) => {
 	// res.send(`<h2>Hello world</h2>`);
@@ -172,7 +173,7 @@ app.get("/try-db", (req, res) => {
 	// });
 });
 
-app.use("/address_book", require(__dirname + "/routes/member"));
+
 
 app.use(express.static("public"));
 
