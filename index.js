@@ -14,6 +14,8 @@ const session = require("express-session");
 
 const moment = require("moment-timezone");
 
+const db = require("./src/db_connect");
+
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: false }));
@@ -134,13 +136,43 @@ app.get("/try-moment", (req, res) => {
 	const m1 = moment(req.session.cookie.expires);
 	const m2 = moment(new Date());
 	const m3 = moment(03 / 06 / 19);
- 
+
 	res.json({
-		"local-m1": m1.tz('Europe/London').format(fm),
-		"local-m2": m2.tz('Europe/London').format(fm),
-		"local-m3": m3.tz('Europe/London').format(fm)
+		"local-m1": m1.tz("Europe/London").format(fm),
+		"local-m2": m2.tz("Europe/London").format(fm),
+		"local-m3": m3.tz("Europe/London").format(fm)
 	});
 });
+
+app.get("/try-db", (req, res) => {
+	const sql = "SELECT * FROM address_book LIMIT 3";
+	db.query(sql, (error, result, fields) => {
+		if (error) {
+			console.log(error);
+		} else {
+			res.json(result);
+		}
+	});
+	// const sql = "UPDATE `address_book` SET name=?, email=? where sid=2";
+	// db.query(sql, ["陳小華", "23213@gmail.com"], (error, result) => {
+	// 	if (error) {
+	// 		console.log(error);
+	// 	} else {
+	// 		res.json(result);
+	// 	}
+	// });
+	// const sql = "INSERT INTO `test`.`address_book` (`name`, `email`, `mobile`, `birthday`, `address`) VALUES (?,?,?,?,?)";
+
+	// db.query(sql, ["張大華", "2dsf3213@gmail.com","0937204444","1988-10-20","Taipei"], (error, result) => {
+	// 	if (error) {
+	// 		console.log(error);
+	// 	} else {
+	// 		res.json(result);
+	// 	}
+	// });
+});
+
+app.use("/address_book", require(__dirname + "/routes/member"));
 
 app.use(express.static("public"));
 
