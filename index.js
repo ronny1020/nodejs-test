@@ -2,9 +2,8 @@ const express = require("express");
 
 const url = require("url");
 
-const multer = require("multer");
+const upload = require("./src/upload");
 const fs = require("fs");
-const upload = multer({ dest: "temp_uploads" });
 
 const app = express();
 
@@ -172,8 +171,6 @@ app.get("/try-db", (req, res) => {
 	// 	}
 	// });
 });
-
-
 
 app.use(express.static("public"));
 

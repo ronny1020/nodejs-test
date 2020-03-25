@@ -1,0 +1,49 @@
+<%- include('../parts/html-head') %> <%- include('../parts/navbar') %>
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<% for(let i=1; i<=totalPages;i++){ %>
+					<li class="page-item <%= i===page?'active':'' %> ">
+						<a class="page-link" href="/address_book/<%= i %>"><%= i %> </a>
+					</li>
+					<% } %>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">name</th>
+				<th scope="col">email</th>
+				<th scope="col">mobile</th>
+				<th scope="col">birthday</th>
+				<th scope="col">address</th>
+				<th scope="col"><i class="fas fa-edit"></i></th>
+				<th scope="col"><i class="fas fa-trash-alt"></i></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% for(let i in rows){ %>
+			<tr>
+				<th scope="row"><%= rows[i].sid %></th>
+				<td><%= rows[i].name %></td>
+				<td><%= rows[i].email %></td>
+				<td><%= rows[i].mobile %></td>
+				<td><%= rows[i].birthday %></td>
+				<td><%= rows[i].address %></td>
+				<td>
+					<a href=""><i class="fas fa-edit"></i></a>
+				</td>
+				<td>
+					<a href=""><i class="fas fa-trash-alt"></i></a>
+				</td>
+			</tr>
+			<% } %>
+		</tbody>
+	</table>
+</div>
+<%- include('../parts/html-foot') %>

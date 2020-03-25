@@ -20,6 +20,23 @@
 			<li class="nav-item">
 				<a class="nav-link" href="/sess">session</a>
 			</li>
+			<li class="nav-item dropdown">
+				<a
+					class="nav-link dropdown-toggle"
+					href="#"
+					id="navbarDropdown"
+					role="button"
+					data-toggle="dropdown"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
+					Address Book
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="/address_book">list</a>
+					<a class="dropdown-item" href="/address_book/add">add</a>
+				</div>
+			</li>
 		</ul>
 		<ul class="navbar-nav ml-auto">
 			<% if(locals.loginUser && locals.loginUser.account){ %>
