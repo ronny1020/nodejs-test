@@ -15,6 +15,8 @@ const moment = require("moment-timezone");
 
 const db = require("./src/db_connect");
 
+const cors = require("cors");
+
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: false }));
@@ -30,6 +32,8 @@ app.use(
 	})
 );
 
+app.use(cors());
+
 app.use((req, res, next) => {
 	if (req.session.loginUser) {
 		res.locals.loginUser = req.session.loginUser;
@@ -40,6 +44,8 @@ app.use((req, res, next) => {
 	next();
 });
 app.use("/address_book", require(__dirname + "/routes/address_book"));
+
+app.use("/homework", require(__dirname + "/routes/homework"));
 
 app.get("/", (req, res) => {
 	// res.send(`<h2>Hello world</h2>`);

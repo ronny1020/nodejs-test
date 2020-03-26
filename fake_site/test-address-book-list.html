@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My Web</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item ">
+								<a class="page-link" href="/address-book/1">1</a>
+							</li>
+							<li class="page-item active">
+								<a class="page-link">2</a>
+							</li>
+							<li class="page-item ">
+								<a class="page-link" href="/address-book/3">3</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">姓名</th>
+						<th scope="col">電郵</th>
+						<th scope="col">手機</th>
+						<th scope="col">生日</th>
+						<th scope="col">住址</th>
+					</tr>
+				</thead>
+				<tbody id="tBody"></tbody>
+			</table>
+		</div>
+	</body>
+	<script>
+		const dataRowFn = obj => {
+			return `
+        <tr>
+            <td>${obj.sid}</td>
+            <td>${obj.name}</td>
+            <td>${obj.email}</td>
+            <td>${obj.mobile}</td>
+            <td>${obj.birthday}</td>
+            <td>${obj.address}</td>
+        </tr>`;
+		};
+
+		fetch("http://localhost:3000/address_book/list/1")
+			.then(r => r.json())
+			.then(obj => {
+				console.log(obj);
+				let str = "";
+				for (let i of obj.rows) {
+					str += dataRowFn(i);
+				}
+				tBody.innerHTML = str;
+			});
+	</script>
+</html>
