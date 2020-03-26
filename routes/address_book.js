@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require("multer");
+
 const db = require(__dirname + "/../src/db_connect.js");
 const upload = require("../src/upload");
 const router = express.Router();
@@ -8,6 +8,25 @@ const moment = require("moment-timezone");
 router.use((req, res, next) => {
 	res.locals.title = "Address Book";
 	next();
+});
+
+router.get("/delete/:sid?", (req, res) => {
+	const sql = "DELETE FROM `address_book` WHERE sid=?";
+	db.queryAsync(sql, [req.params.sid])
+		.then(results => {
+			if (req.get("Referer")) {
+				res.redirect(req.get("Referer"));
+			} else {
+				res.redirect("/address-book");
+			}
+		})
+		.catch(ex => {
+			console.log("ex:", ex);
+			res.json({
+				success: false,
+				info: "Cannot delete"
+			});
+		});
 });
 
 router.get("/add", (req, res) => {
@@ -19,17 +38,17 @@ router.post("/add", upload.none(), (req, res) => {
 		success: false,
 		error: ""
 	};
-	
-	if(req.body.name.length<2){
-        output.error = 'name is too short';
-        return res.json(output);
-    }
 
-    const email_pattern = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    if(!email_pattern.test(req.body.email)){
-        output.error = 'Email 格式錯誤';
-        return res.json(output);
-    }
+	if (req.body.name.length < 2) {
+		output.error = "name is too short";
+		return res.json(output);
+	}
+
+	const email_pattern = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+	if (!email_pattern.test(req.body.email)) {
+		output.error = "Email 格式錯誤";
+		return res.json(output);
+	}
 
 	const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?,?,?,?,?, NOW())";
 
@@ -46,6 +65,59 @@ router.post("/add", upload.none(), (req, res) => {
 		});
 
 	//res.json(req.body);
+});
+
+router.get("/edit/:sid", (req, res) => {
+	const sql = "SELECT * FROM address_book WHERE sid=?";
+	db.queryAsync(sql, [req.params.sid])
+		.then(results => {
+			if (results.length) {
+				results[0].birthday = moment(results[0].birthday).format("YYYY-MM-DD");
+				res.render("address_book/edit", results[0]);
+			} else {
+				res.redirect("/address_book");
+			}
+		})
+		.catch(ex => {
+			console.log("ex:", ex);
+		});
+});
+
+router.post('/edit', upload.none(), (req, res)=>{
+    const output = {
+        success: false,
+        error: '',
+    };
+ 
+    if(req.body.name.length<2){
+        output.error = 'Name is too short!';
+        return res.json(output);
+    }
+
+    const email_pattern = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    if(!email_pattern.test(req.body.email)){
+        output.error = 'Format of Email is wrong!';
+        return res.json(output);
+    }
+
+    const data = {...req.body}; 
+    delete data.sid; 
+
+    const sql = "UPDATE `address_book` SET ? WHERE sid=?";
+
+    db.queryAsync(sql, [data, req.body.sid])
+        .then(results=>{
+            output.results = results;
+            if(results.changedRows===1){
+                output.success = true;
+            } else {
+                output.error = '資料沒有變更';
+            }
+            res.json(output);
+        })
+        .catch(ex=>{
+            console.log('ex:', ex);
+        })
 });
 
 router.get("/:page?", (req, res) => {

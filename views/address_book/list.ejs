@@ -23,7 +23,7 @@
 				<th scope="col">birthday</th>
 				<th scope="col">address</th>
 				<th scope="col"><i class="fas fa-edit"></i></th>
-				<th scope="col"><i class="fas fa-trash-alt"></i></th>
+				<th scope="col"><i class="fas fa-trash"></i></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -36,14 +36,21 @@
 				<td><%= rows[i].birthday %></td>
 				<td><%= rows[i].address %></td>
 				<td>
-					<a href=""><i class="fas fa-edit"></i></a>
+					<a href="/address_book/edit/<%= rows[i].sid %>"><i class="fas fa-edit"></i></a>
 				</td>
 				<td>
-					<a href=""><i class="fas fa-trash-alt"></i></a>
+					<a href="javascript:delete_it(<%= rows[i].sid %>)"><i class="fas fa-trash"></i></a>
 				</td>
 			</tr>
 			<% } %>
 		</tbody>
 	</table>
 </div>
+<script>
+	function delete_it(sid) {
+		if (confirm(`Are you sure to delete data with ${sid}?`)) {
+			location.href = "/address-book/delete/" + sid;
+		}
+	}
+</script>
 <%- include('../parts/html-foot') %>
