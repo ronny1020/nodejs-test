@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Title</title>
+	</head>
+	<body>
+		<div id="info"></div>
+
+		<script>
+			function myAsyncFn() {
+				return new Promise((resolve, reject) => {
+					setTimeout(() => {
+						resolve(Math.floor(Math.random() * 100));
+					}, 100 + Math.random() * 1000);
+				});
+			}
+
+			const ar = [];
+
+			myAsyncFn()
+				.then(r => {
+					info.innerHTML += r + "<br>";
+					ar.push(r);
+					return myAsyncFn();
+				})
+				.then(r => {
+					info.innerHTML += r + "<br>";
+					ar.push(r);
+					return myAsyncFn();
+				})
+				.then(r => {
+					info.innerHTML += r + "<br>";
+					ar.push(r);
+					console.log(ar);
+				});
+		</script>
+	</body>
+</html>

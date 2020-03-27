@@ -15,17 +15,7 @@
 			<div class="row">
 				<div class="col">
 					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item ">
-								<a class="page-link" href="/address-book/1">1</a>
-							</li>
-							<li class="page-item active">
-								<a class="page-link">2</a>
-							</li>
-							<li class="page-item ">
-								<a class="page-link" href="/address-book/3">3</a>
-							</li>
-						</ul>
+						<ul class="pagination"></ul>
 					</nav>
 				</div>
 			</div>
@@ -48,25 +38,45 @@
 	<script>
 		const dataRowFn = obj => {
 			return `
-        <tr>
-            <td>${obj.sid}</td>
-            <td>${obj.name}</td>
-            <td>${obj.email}</td>
-            <td>${obj.mobile}</td>
-            <td>${obj.birthday}</td>
-            <td>${obj.address}</td>
-        </tr>`;
+					<tr>
+						<td>${obj.sid}</td>
+						<td>${obj.name}</td>
+						<td>${obj.email}</td>
+						<td>${obj.mobile}</td>
+						<td>${obj.birthday}</td>
+						<td>${obj.address}</td>
+					</tr>`;
 		};
 
-		fetch("http://localhost:3000/address_book/list/1")
-			.then(r => r.json())
-			.then(obj => {
-				console.log(obj);
-				let str = "";
-				for (let i of obj.rows) {
-					str += dataRowFn(i);
-				}
-				tBody.innerHTML = str;
-			});
+		const paginationItemFn = obj => {
+			return `
+					<li class="page-item ${obj.active}">
+						<a class="page-link" href="javascript:changePage(${obj.page})">${obj.page}</a>
+					</li>
+				`;
+		};
+
+		function changePage(page) {
+			fetch("http://localhost:3000/address_book/list/" + page)
+				.then(r => r.json())
+				.then(obj => {
+					console.log(obj);
+					let str = "";
+					for (let i of obj.rows) {
+						str += dataRowFn(i);
+					}
+					tBody.innerHTML = str;
+
+					str = "";
+					for (let i = 1; i <= obj.totalPages; i++) {
+						str += paginationItemFn({
+							page: i,
+							active: i === obj.page ? "active" : ""
+						});
+					}
+					document.querySelector(".pagination").innerHTML = str;
+				});
+		}
+		changePage(1);
 	</script>
 </html>

@@ -211,7 +211,15 @@ router.get('/list/:page?', (req, res)=>{
         });
 });
 
+router.get('/list/:page?', async (req, res)=>{
+    const output = await getDataByPage(req);
+    res.json(output);
+});
 
+router.get('/:page?', async (req, res)=>{
+    const output = await getDataByPage(req);
+    res.render('address-book/list', output);
+});
 router.get('/:page?', getDataByPage);
 
 module.exports = router;

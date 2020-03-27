@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<button onclick="getData()">getData</button>
+		<div id="info"></div>
+	</body>
+	<script>
+		function getData() {
+			fetch("http://localhost:3000/try-session")
+				.then(r => r.json())
+				.then(obj => {
+					console.log(obj);
+					info.innerHTML = obj.my_var;
+				});
+		}
+	</script>
+</html>
