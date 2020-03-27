@@ -31,12 +31,13 @@ app.use(
 		}
 	})
 );
-const whiteList = ["http://localhost:5500/", "http://127.0.0.1:5500/", "http://localhost:3000/", "http://127.0.0.1:3000/", undefined];
+const whiteList = ["http://localhost:5500", "http://127.0.0.1:5500", "http://localhost:3000", "http://127.0.0.1:3000", undefined];
 
 const corsOptions = {
+	credentials: true,
 	origin: function(origin, cb) {
+		console.log("origin:", origin);
 		if (whiteList.indexOf(origin) < 0) {
-			console.log("origin:", origin);
 			cb(null, false);
 		} else {
 			cb(null, true);

@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>My Web</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+	</head>
+
+	<body></body>
+</html>
+ <nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="#">Navbar</a>
+	<button
+		class="navbar-toggler"
+		type="button"
+		data-toggle="collapse"
+		data-target="#navbarSupportedContent"
+		aria-controls="navbarSupportedContent"
+		aria-expanded="false"
+		aria-label="Toggle navigation"
+	>
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="/sales-json">sales-json </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/sess">session</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a
+					class="nav-link dropdown-toggle"
+					href="#"
+					id="navbarDropdown"
+					role="button"
+					data-toggle="dropdown"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
+					Address Book
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="/address_book">list</a>
+					<a class="dropdown-item" href="/address_book/add">add</a>
+				</div>
+			</li>
+		</ul>
+		<ul class="navbar-nav ml-auto">
+			
+
+			<li class="nav-item active">
+				<a class="nav-link" href="/member/login">login </a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/member/registration">registration</a>
+			</li>
+
+			
+		</ul>
+	</div>
+</nav>
+
+<div class="container">
+	<form method="POST" onsubmit="return checkForm()" name="form1">
+		<div class="form-group">
+			<label for="account">account</label>
+			<input type="text" class="form-control" id="account" name="account" />
+			<small id="emailHelp" class="form-text text-muted"></small>
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" class="form-control" id="password" name="password" />
+		</div>
+
+		<button type="submit" class="btn btn-primary">login</button>
+	</form>
+</div>
+<script> 
+	function checkForm() {
+		const output = {
+			account: document.querySelector("#account").value,
+			password: document.querySelector("#password").value
+		};
+		fetch("http://localhost:3000/member/login", {
+			method: "POST",
+            body: JSON.stringify(output),
+            credentials:"include",
+			headers: {
+				"Content-Type": "application/JSON"
+			}
+		})
+		.then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    if(obj.success){
+                        location.href = 'test-address-book-list.html';
+                    } else {
+                        alert(obj.error);
+                    }
+                })
+		return false;
+	}
+</script>
+</body>
+
+</html>

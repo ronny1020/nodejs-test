@@ -11,7 +11,9 @@
 	</body>
 	<script>
 		function getData() {
-			fetch("http://localhost:3000/try-session")
+			fetch("http://localhost:3000/try-session", {
+				credentials: "include"
+			})
 				.then(r => r.json())
 				.then(obj => {
 					console.log(obj);

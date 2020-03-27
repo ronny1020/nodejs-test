@@ -61,6 +61,10 @@
 				.then(r => r.json())
 				.then(obj => {
 					console.log(obj);
+
+					if (!obj.success) {
+						return;
+					}
 					let str = "";
 					for (let i of obj.rows) {
 						str += dataRowFn(i);
