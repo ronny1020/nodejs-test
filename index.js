@@ -31,8 +31,19 @@ app.use(
 		}
 	})
 );
+const whiteList = ["http://localhost:5500/", "http://127.0.0.1:5500/", "http://localhost:3000/", "http://127.0.0.1:3000/", undefined];
 
-app.use(cors());
+const corsOptions = {
+	origin: function(origin, cb) {
+		if (whiteList.indexOf(origin) < 0) {
+			console.log("origin:", origin);
+			cb(null, false);
+		} else {
+			cb(null, true);
+		}
+	}
+};
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
 	if (req.session.loginUser) {
